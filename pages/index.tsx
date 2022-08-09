@@ -1,84 +1,44 @@
 import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
+import {useState, useEffect , useRef} from 'react'
+import logo from '../images/LOGOO..jpg'
+import milky from '../images/logo1.jpeg'
+import milk_cookie from '../images/milk_cookie.png' 
+import Script from 'next/script'
+import CELLS from 'vanta/dist/vanta.cells.min'
+import * as THREE from "three"
 
 const Home: NextPage = () => {
+  
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center py-2">
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <div className="bg-[#78dbf3]">
+    
 
-      <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
-        <h1 className="text-6xl font-bold">
-          Welcome to{' '}
-          <a className="text-blue-600" href="https://nextjs.org">
-            Next.js!
-          </a>
-        </h1>
-
-        <p className="mt-3 text-2xl">
-          Get started by editing{' '}
-          <code className="rounded-md bg-gray-100 p-3 font-mono text-lg">
-            pages/index.tsx
-          </code>
-        </p>
-
-        <div className="mt-6 flex max-w-4xl flex-wrap items-center justify-around sm:w-full">
-          <a
-            href="https://nextjs.org/docs"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Documentation &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Find in-depth information about Next.js features and its API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Learn &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Learn about Next.js in an interactive course with quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Examples &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Discover and deploy boilerplate example Next.js projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Deploy &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+      <Script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js" />
+      <Script src='https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.cells.min.js'></Script>
+      <nav className='flex space-x-4 justify-between shadow-xl px-4 items-center py-2  bg-[#78dbf3]'>
+        {/* <img src={logo.src} className='h-8 ml-8 rounded-full' ></img>  */}
+        <img src={milky.src} className='h-24'></img>
+        <div className='pr-5'>
+        
         </div>
-      </main>
-
-      <footer className="flex h-24 w-full items-center justify-center border-t">
-        <a
-          className="flex items-center justify-center gap-2"
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-        </a>
-      </footer>
+      </nav>
+      <div>
+      <div  className='flex items-center justify-between py-20  px-28'>
+        <div>
+          <h1 className='text-9xl  font-Poppins text-white'>MilkyWay</h1>
+          <p className='text-4xl mt-14 text-white '>Pouring a glass of nutrition into your life</p>
+          
+        </div>
+        <div >
+        <img src={milk_cookie.src} className='h-[30rem] mr-0'></img>
+        </div>
+      </div>
+      <div className='text-center justify-evenly  space-x-8'>
+      <button className='text-4xl text-white bg-orange-500 px-6 py-6 rounded-lg'>Login</button>
+      <button className='text-4xl text-white bg-orange-500 px-6 py-6 rounded-lg'>Register</button>
+      </div>
+      <h1>About us</h1>
+      </div>
     </div>
   )
 }
