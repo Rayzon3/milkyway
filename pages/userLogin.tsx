@@ -10,6 +10,8 @@ const UserLogin = () => {
         axios.post('http://localhost:5000/api/auth/login',{
         email:email,
         password:pass
+        }, {
+          withCredentials: true
         })
         .then((res)=>{console.log(res)})
         .catch((err)=>{console.log(err)})
