@@ -1,7 +1,11 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
+
 
 const Producer_home = () => {
-    
+    const [name, setName] = useState('')
+    useEffect(() =>{
+        setName(localStorage.getItem('name'))
+      },[])
      
     
   return (
@@ -11,7 +15,7 @@ const Producer_home = () => {
         <button>Sign out</button>
         </div>
         <div>
-        <h1 className='text-center my-36 text-7xl  font-bold'>Hi, Username</h1>
+        <h1 className='text-center my-36 text-7xl  font-bold'>Hi, {name}</h1>
         <div className='grid grid-cols-3 gap-10 mx-32 text-center'>
             <div className='border-2 rounded-2xl shadow-2xl px-4 py-8'>
                 <h1 className='text-3xl font-bold mb-4'>New Orders</h1>
