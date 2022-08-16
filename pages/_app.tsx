@@ -1,19 +1,26 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
-import {useEffect} from 'react'
+import {useState} from 'react'
+import AppContext from '../AppContext'
+import lo from '../languageObject'
 
 function MyApp({ Component, pageProps }: AppProps) {
-  useEffect(() =>{
-    const threeScript = document.createElement('script')
-    threeScript.setAttribute("id", 'threeScript')
-    threeScript.setAttribute("src", 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js')
-    document.getElementsByTagName("head")[0].appendChild(threeScript)
-    return() => {
-      if(threeScript) threeScript.remove();
-    }
-    
-  },[])
-  return <Component {...pageProps} />
+  const [languageSelected, setLanguageSelected] = useState("en");
+  const languageObject = lo;
+  
+  return(
+    <AppContext.Provider
+    value={{
+      state:{
+        languages:languageObject[languageSelected],
+        languageSelected:languageSelected,
+      },
+      setLanguageSelected: setLanguageSelected
+    }}
+    >
+      <Component {...pageProps} />
+    </AppContext.Provider>
+  ) 
 }
 
 export default MyApp

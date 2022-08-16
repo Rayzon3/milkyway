@@ -2,8 +2,17 @@ import Link from "next/link"
 import {useState} from 'react'
 import axios from 'axios'
 import { useRouter } from "next/router"
+import {useContext} from 'react'
+import AppContext from "../AppContext"
 
 const UserLogin = () => {
+
+  const value = useContext(AppContext);
+  let { languageSelected } = value.state;
+  let {milkyway, slogan, eemail, password, login, signup, about, byline,p1,p2,p3,rb, rs, close}  = value.state.languages;
+
+
+  console.log(languageSelected)
 
   const router = useRouter();
     const [email, setEmail] = useState('')
@@ -31,14 +40,14 @@ const UserLogin = () => {
     }
   return (
     <div className='min-h-screen bg-[#5fc5fb] pt-20'>
-        <h1 className='text-center text-white font-Poppins text-8xl pb-8'>MilkyWay</h1>
+        <h1 className='text-center text-white font-Poppins text-8xl pb-8'>{milkyway}</h1>
         <form className='bg-white mx-auto flex flex-col justify-center w-1/3 mt-8 p-8 rounded-xl'>
-            <h1 className='font-Poppins text-3xl text-center py-3'>Login in to your account</h1>
+            <h1 className='font-Poppins text-3xl text-center py-3'>{login}</h1>
             <input
             id="name"
             type="email"
             className="p-2 m-2 rounded-md border-gray-300 border-b-2 focus:outline-none focus:border-cyan-400"
-            placeholder="Enter Email"
+            placeholder={eemail}
             required
             value={email}
             onChange={(e)=>{setEmail(e.target.value)}}
@@ -48,7 +57,7 @@ const UserLogin = () => {
             id="name"
             type="text"
             className="p-2 m-2 rounded-md border-gray-300 border-b-2 focus:outline-none focus:border-cyan-400"
-            placeholder="Enter Password"
+            placeholder={password}
             required
             value={pass}
             onChange={(e)=>{setPass(e.target.value)}}

@@ -1,8 +1,9 @@
 import axios from 'axios';
 import {useState} from 'react'
-
+import { useRouter } from "next/router"
 
 const ProviderRegister = () => {
+  const router = useRouter();
   const [name ,setName] = useState('')
   const [email, setEmail] = useState('')
   const [pass, setPass] = useState('')
@@ -14,7 +15,9 @@ const ProviderRegister = () => {
     },{
       withCredentials: true
     })
-    .then((res)=>{console.log(res)})
+    .then((res)=>{
+      router.push('/providerLogin')
+    })
     .catch((err) => {console.log(err)})
     setName('')
     setEmail('')

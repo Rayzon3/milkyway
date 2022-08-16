@@ -4,14 +4,18 @@ import curd from '../images/curd.png';
 import paneer from '../images/panner.png';
 import lassi from '../images/lassi.png';
 import ghee from '../images/ghee.png';
-
-
+import { useContext } from 'react';
+import AppContext from '../AppContext'
 
 const Checkout = () => {
+  const value = useContext(AppContext);
+  let { languageSelected } = value.state;
+  let {milkyway, slogan, login, signup, about, byline,p1,p2,p3,rb, rs, close}  = value.state.languages;
+  console.log(languageSelected)
   return (
     <div className='min-h-screen pb-20 bg-[#5fc5fb]'>
         <div>
-            <h1 className='text-white font-Poppins text-3xl ml-10 py-3'>MilkyWay</h1>
+            <h1 className='text-white font-Poppins text-3xl ml-10 py-3'>{milkyway}</h1>
         </div>
         <div className='bg-white rounded-xl shadow-2xl mb-20 space-y-8 mt-16 mx-40'>
             <h1 className='text-center text-4xl font-bold py-8  '>Your Basket</h1>

@@ -10,6 +10,7 @@ import ghee from '../images/ghee.png';
 import {AiFillCloseCircle} from 'react-icons/ai'
 import Link from 'next/link';
 import axios from 'axios';
+import {motion, AnimatePresence} from 'framer-motion'
 
 
 const Home = () => {
@@ -30,10 +31,9 @@ const Home = () => {
   const [link, setLink] = useState('')
   const [data, setData] = useState([])
 
-  // const handleOpen = () => {
-  //   setOpen(true)
-  //   setName(providers.name)
-  // }
+  const handleClick = () => {
+    localStorage.setItem('vendor_name',pname)
+  }
 
   useEffect(() =>{
     axios.get('http://localhost:5000/api/getProviders')
@@ -125,9 +125,14 @@ const Home = () => {
   return (
     <div>
       <div>
-        
-      
-      <div className={open?'w-1/4 fixed rounded-xl bg-[#5fc5fb] z-20 right-0 h-full ':'hidden'}>
+        <AnimatePresence>
+      {
+        open &&
+      <motion.div className={'w-1/4 fixed rounded-xl bg-[#5fc5fb] z-20 right-0 h-full '}
+      initial={{x:300, opacity:0}}
+      animate={{x:0, opacity:1}}
+      exit={{x:300,opacity:0}}
+      >
         <p><AiFillCloseCircle className='mx-auto text-3xl mt-5' onClick={()=>{setOpen(false)}}></AiFillCloseCircle></p>
         
         <h1 className='text-center mt-6 text-3xl font-bold'>{pname}</h1>
@@ -181,11 +186,13 @@ const Home = () => {
         </div>
         <div className='flex space-x-4 mx-5 mt-8'>
           <button className='bg-orange-500 shadow-2xl text-white px-3 py-2 rounded-lg '>Download Lab Report</button>
-          <Link href='/checkout'><button className='text-center shadow-2xl bg-orange-500 text-white px-3 py-2 rounded-lg'>Proceed further with this option</button></Link>          
+          <Link href={{pathname:'/checkout'}}><button className='text-center shadow-2xl bg-orange-500 text-white px-3 py-2 rounded-lg' onClick={handleClick}>Proceed further with this option</button></Link>          
         </div>
 
         
-      </div>
+      </motion.div>
+      }
+        </AnimatePresence>
         <div className='flex backdrop-filter backdrop-blur-lg border-b-2 absolute z-10 w-full items-center justify-between'>
         <h1 className=' font-Poppins text-4xl mx-4 my-3'>MilkyWay</h1>
         <p className='text-2xl mr-10'>Hi, {name}</p>
@@ -234,26 +241,26 @@ const Home = () => {
     </div>
       
     </div>
-    <div className='rounded-2xl shadow-2xl bg-green-400 -mt-8 pb-8 absolute w-full text-white '>
+    <div className='rounded-2xl shadow-2xl bg-green-400  -mt-8 pb-8 absolute w-full text-white '>
         <h1 className='text-center py-8 text-black font-bold text-4xl'>What are you craving today?</h1>
         <div className='grid grid-cols-5 gap-8 px-10 '>
-            <div className={b1?'bg-amber-600 rounded-2xl':''} onClick={()=>{setB1(!b1)}}>
+            <div className={b1?'bg-amber-600 rounded-2xl transition':'transition rounded-2xl'} onClick={()=>{setB1(!b1)}}>
                 <img src={milk.src} className='mx-auto h-52'></img>
                 <p className='text-center text-2xl font-Poppins'>Milk</p>
             </div>
-            <div className={b2?'bg-amber-600 rounded-2xl':''} onClick={()=>{setB2(!b2)}}>
+            <div className={b2?'bg-amber-600 rounded-2xl transition':'transition rounded-2xl'} onClick={()=>{setB2(!b2)}}>
                 <img src={curd.src} className='h-28 mt-12 mx-auto'></img>
                 <p className='text-center text-2xl mt-10 font-Poppins'>Curd</p>
             </div>
-            <div className={b3?'bg-amber-600 rounded-2xl':''} onClick={()=>{setB3(!b3)}}>
+            <div className={b3?'bg-amber-600 rounded-2xl transition':'transition rounded-2xl'} onClick={()=>{setB3(!b3)}}>
                 <img src={paneer.src} className='h-48 mx-auto'></img>
                 <p className='text-center text-2xl font-Poppins'>Paneer</p>
             </div>
-            <div className={b4?'bg-amber-600 rounded-2xl':''} onClick={()=>{setB4(!b4)}}>
+            <div className={b4?'bg-amber-600 rounded-2xl transition':'transition rounded-2xl'} onClick={()=>{setB4(!b4)}}>
                 <img src={lassi.src} className='mx-auto h-32 mt-8'></img>
                 <p className='text-center text-2xl mt-8 font-Poppins'>Lassi</p>
             </div>
-            <div className={b5?'bg-amber-600 rounded-2xl':''} onClick={()=>{setB5(!b5)}}>
+            <div className={b5?'bg-amber-600 rounded-2xl transition':'transition rounded-2xl'} onClick={()=>{setB5(!b5)}}>
                 <img src={ghee.src} className='h-32 mt-8 mx-auto'></img>
                 <p className='text-center text-2xl mt-8 font-Poppins'>Ghee</p>
             </div>
