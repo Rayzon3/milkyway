@@ -11,7 +11,7 @@ const ProviderRegister = () => {
     axios.post('http://localhost:5000/api/auth/registerProvider',{
       name:name,
       email:email,
-      password:pass
+      password:pass,
     },{
       withCredentials: true
     })

@@ -11,13 +11,15 @@ import {AiFillCloseCircle} from 'react-icons/ai'
 import Link from 'next/link';
 import axios from 'axios';
 import {motion, AnimatePresence} from 'framer-motion'
+import { useRouter } from "next/router"
 
 
 const Home = () => {
 
+  const router = useRouter();
   const [latitude ,setLatitude] = useState(null)
   const [longitude ,setLongitude] = useState(null)
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(true)
   const [pname, setPname] = useState('')
   const [anchor, setAnchor] = useState([])
   const [demo, setDemo] = useState([])
@@ -31,8 +33,22 @@ const Home = () => {
   const [link, setLink] = useState('')
   const [data, setData] = useState([])
 
-  const handleClick = () => {
-    localStorage.setItem('vendor_name',pname)
+  
+
+  const handleLogout = () => {
+      axios.get('http://localhost:5000/api/auth/logout',
+      {
+        withCredentials:true,
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }
+      })
+      .then((res)=>{
+        router.push('/')
+      })
+      .catch((err)=>{console.log(err)})
+    
   }
 
   useEffect(() =>{
@@ -42,9 +58,24 @@ const Home = () => {
     })
     .catch((error) => console.log(error))
     setName(localStorage.getItem('name'))
-    // setLink(`http://maps.google.co.uk/maps?q=${latitude},${longitude}`)
+
   },[])
   
+  useEffect(() =>{
+    axios.get('http://localhost:5000/api/auth/me',{
+      withCredentials:true,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }
+    })
+    .then((m_response) =>{
+      setPname(m_response.data.name)
+    })
+    .catch((err) =>{
+      console.log(err)
+    })
+  },[])
   if(b1 && !order.includes('Milk')){
     setOrder([...order, 'Milk'])
     
@@ -140,7 +171,7 @@ const Home = () => {
         <p className='mt-3 mx-4 text-lg mb-3'>Address: Tere ghar k piche, teri khidki k niche</p>
         <div className='mx-4 '>
     
-        <Map animate={true} height={200}  center={[latitude,longitude]} defaultZoom={18}>
+        <Map animate={true} height={200}  center={[latitude,longitude]} defaultZoom={18} zoom={10} minZoom={1} maxZoom={1}>
         <Marker  anchor={[latitude,longitude]}>
         </Marker>
         </Map> 
@@ -186,7 +217,7 @@ const Home = () => {
         </div>
         <div className='flex space-x-4 mx-5 mt-8'>
           <button className='bg-orange-500 shadow-2xl text-white px-3 py-2 rounded-lg '>Download Lab Report</button>
-          <Link href={{pathname:'/checkout'}}><button className='text-center shadow-2xl bg-orange-500 text-white px-3 py-2 rounded-lg' onClick={handleClick}>Proceed further with this option</button></Link>          
+          <Link href={{pathname:'/checkout'}}><button className='text-center shadow-2xl bg-orange-500 text-white px-3 py-2 rounded-lg' >Proceed further with this option</button></Link>          
         </div>
 
         
@@ -195,7 +226,11 @@ const Home = () => {
         </AnimatePresence>
         <div className='flex backdrop-filter backdrop-blur-lg border-b-2 absolute z-10 w-full items-center justify-between'>
         <h1 className=' font-Poppins text-4xl mx-4 my-3'>MilkyWay</h1>
+        <div>
         <p className='text-2xl mr-10'>Hi, {name}</p>
+        <button className='' onClick={handleLogout}>Log Out</button>
+        </div>
+
         </div>
         
     <div>
@@ -207,14 +242,14 @@ const Home = () => {
           data.map((providers)=>{
             console.log(providers)
             return(
-        <Draggable onDragStart={()=>{
+        <Draggable offset={[60, 87]} onDragStart={()=>{
           setOpen(true);
           setPname(providers.name);
         }} onDragMove={()=>{
           setOpen(true);
           setPname(providers.name);
         }} anchor={[providers.lat, providers.long]} >
-        <img src={milk_pin.src} width={20} height={10} alt="Pigeon!" />
+        <img src={milk_pin.src} width={100} height={95} alt="Pigeon!" />
         </Draggable>
             );
           })
