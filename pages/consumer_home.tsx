@@ -33,7 +33,10 @@ const Home = () => {
   const [link, setLink] = useState('')
   const [data, setData] = useState([])
   const [logged, setLogged] = useState(false)
-
+  const [pid, setPid] = useState('')
+  const [items, setItems] = useState([])
+  const [prices, setPrices] = useState([])
+  const [collect, setCollect] = useState([])
   
 
   const handleLogout = () => {
@@ -52,13 +55,38 @@ const Home = () => {
     
   }
 
+  const checkout = () => {
+    localStorage.setItem('seller',pname)
+    localStorage.setItem('Items',JSON.stringify(items))
+    localStorage.setItem('Prices',JSON.stringify(prices))
+  }
+
+  useEffect(() =>{
+    axios.post('http://localhost:5000/api/providerStock/getProviderItemsData',{
+      providerID: pid
+    })
+    .then((response) =>{
+      setItems(response.data.items)
+      setPrices(response.data.prices)
+      console.log(response.data)
+    })
+    .catch((err) =>{console.log(err)})
+    const zip = (items, prices) => items.map((x, i) => [x, prices[i]]);
+    setCollect(zip(items, prices))
+    console.log(collect) 
+  },[ pid])
+
+ 
+    
+
+
+
   useEffect(() =>{
     axios.get('http://localhost:5000/api/getProviders')
     .then((response) =>{
-      setData(response.data) 
+      setData(response.data)
     })
     .catch((error) => console.log(error))
-    // setName(localStorage.getItem('name'))
 
   },[])
   
@@ -161,6 +189,7 @@ const Home = () => {
       <div>
         <AnimatePresence>
       {
+        
         open &&
       <motion.div className={'w-1/4 fixed rounded-xl bg-[#5fc5fb] z-20 right-0 h-full '}
       initial={{x:300, opacity:0}}
@@ -180,47 +209,29 @@ const Home = () => {
         </Map> 
         
         </div>
-        <div className='grid grid-cols-2'>
-          <div>
-            <p className='ml-4 text-lg'>Products Sold:</p>
-          </div>
-          <div>
-            <p className='ml-4 text-lg'>Price</p>
-          </div>
-          <div>
-            <p className='ml-4 text-lg'>Milk</p>
-          </div>
-          <div>
-            <p className='ml-4 text-lg'>120/kg</p>
-          </div>
-          <div>
-            <p className='ml-4 text-lg'>Curd</p>
-          </div>
-          <div>
-            <p className='ml-4 text-lg'>200/kg</p>
-          </div>
-          <div>
-            <p className='ml-4 text-lg'>Paneer</p>
-          </div>
-          <div>
-            <p className='ml-4 text-lg'>69/kg</p>
-          </div>
-          <div>
-            <p className='ml-4 text-lg'>Lassi</p>
-          </div>
-          <div>
-            <p className='ml-4 text-lg'>69/kg</p>
-          </div>
-          <div>
-            <p className='ml-4 text-lg'>Ghee</p>
-          </div>
-          <div>
-            <p className='ml-4 text-lg'>40/kg</p>
-          </div>
-        </div>
+        {   
+
+            collect.map((item) =>{
+              if(item!=null){
+                // console.log('Not null')
+                return(
+                    <div className='flex justify-between items-center mx-8 my-2 '>
+                        <h1 className='text-xl font-bold'>{item[0]}</h1>
+                        <h1 className='text-xl '><span className='text-red-500'>Price:</span> {item[1]}</h1>
+                    </div>
+                );
+              }
+              else{
+                // console.log('null')
+                return(
+                  <h1>No data presented</h1>
+                )
+              }
+            })
+        }
         <div className='flex space-x-4 mx-5 mt-8'>
           <button className='bg-orange-500 shadow-2xl text-white px-3 py-2 rounded-lg '>Download Lab Report</button>
-          <Link href={{pathname:'/checkout'}}><button className='text-center shadow-2xl bg-orange-500 text-white px-3 py-2 rounded-lg' >Proceed further with this option</button></Link>          
+          <Link href={{pathname:'/checkout'}}><button className='text-center shadow-2xl bg-orange-500 text-white px-3 py-2 rounded-lg' onClick={checkout}>Proceed further with this option</button></Link>          
         </div>
 
         
@@ -251,17 +262,22 @@ const Home = () => {
         <button></button>
         {
           data.map((providers)=>{
-            // console.log(providers)
+
             return(
-        <Draggable offset={[60, 87]} onDragStart={()=>{
+          <Draggable offset={[60, 87]} onDragStart={()=>{
           setOpen(true);
           setPname(providers.name);
+          setPid(providers.id)
+          // getItems();        
         }} onDragMove={()=>{
           setOpen(true);
           setPname(providers.name);
+          setPid(providers.id)
+          // getItems();  
         }} anchor={[providers.lat, providers.long]} >
-        <img src={milk_pin.src} width={100} height={95} alt="Pigeon!" />
+        <img src={milk_pin.src} width={20} height={10} alt="Pigeon!" />
         </Draggable>
+
             );
           })
         }
