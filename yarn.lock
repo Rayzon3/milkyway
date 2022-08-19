@@ -175,6 +175,11 @@
   "resolved" "https://registry.npmjs.org/arg/-/arg-5.0.2.tgz"
   "version" "5.0.2"
 
+"array-move@^4.0.0":
+  "integrity" "sha512-+RY54S8OuVvg94THpneQvFRmqWdAHeqtMzgMW6JNurHxe8rsS07cHQdfGkXnTUXiBcyZ0j3SiDIxxj0RPiqCkQ=="
+  "resolved" "https://registry.npmjs.org/array-move/-/array-move-4.0.0.tgz"
+  "version" "4.0.0"
+
 "asynckit@^0.4.0":
   "integrity" "sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q=="
   "resolved" "https://registry.npmjs.org/asynckit/-/asynckit-0.4.0.tgz"

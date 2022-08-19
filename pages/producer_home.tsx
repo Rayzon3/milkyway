@@ -1,18 +1,51 @@
 import {useState, useEffect} from 'react'
+import axios from 'axios'
+import Link from 'next/link'
 
 
 const Producer_home = () => {
     const [name, setName] = useState('')
+    const [isListed, setisListed] = useState(false)
     useEffect(() =>{
-        setName(localStorage.getItem('name'))
+        axios.get('http://localhost:5000/api/auth/providerMe',{
+          withCredentials:true,
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          }
+        })
+        .then((m_response) =>{
+          setName(m_response.data.name)
+        })
+        .catch((err) =>{
+          console.log(err)
+        })
       },[])
-     
+
+      const handleSignout = () => {
+    
+            axios.get('http://localhost:5000/api/auth/logoutProvider',{
+                withCredentials: true
+            })
+      }
+
+      useEffect(() =>{
+        axios.get('http://localhost:5000/api/providerStock/getStock',{
+          withCredentials: true
+        })
+        .then((response) =>{
+          if(response.data == null){
+            setisListed(true)
+          }
+        })
+        .catch((err) =>{console.log(err)})
+      },[])
     
   return (
     <div className=''>
         <div className='flex px-20 py-3 items-center justify-between'>
         <h1 className='font-Poppins text-4xl'>MilkyWay</h1>
-        <button>Sign out</button>
+        <button onClick={handleSignout}>Sign out</button>
         </div>
         <div>
         <h1 className='text-center my-36 text-7xl  font-bold'>Hi, {name}</h1>
@@ -31,6 +64,19 @@ const Producer_home = () => {
             </div>
 
         </div>
+        {
+          isListed &&
+        <div className='text-center'>
+            <Link href='/itemsSold'><button className='mt-20 text-2xl font-bold bg-black text-white rounded-xl px-6 py-3 shadow-2xl'>List Items to Sell</button></Link>
+        </div>
+        }
+        {
+          !isListed &&
+          <div className='text-center'>
+            <Link href='/updateItems'><button className='mt-20 text-2xl font-bold bg-black text-white rounded-xl px-6 py-3 shadow-2xl'>Update & Check Items</button></Link>
+        </div>
+
+        }
         </div>
     </div>
   )

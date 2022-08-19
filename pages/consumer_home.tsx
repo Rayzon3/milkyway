@@ -19,7 +19,7 @@ const Home = () => {
   const router = useRouter();
   const [latitude ,setLatitude] = useState(null)
   const [longitude ,setLongitude] = useState(null)
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
   const [pname, setPname] = useState('')
   const [anchor, setAnchor] = useState([])
   const [demo, setDemo] = useState([])
@@ -32,6 +32,7 @@ const Home = () => {
   const [name, setName] = useState('')
   const [link, setLink] = useState('')
   const [data, setData] = useState([])
+  const [logged, setLogged] = useState(false)
 
   
 
@@ -57,7 +58,7 @@ const Home = () => {
       setData(response.data) 
     })
     .catch((error) => console.log(error))
-    setName(localStorage.getItem('name'))
+    // setName(localStorage.getItem('name'))
 
   },[])
   
@@ -71,9 +72,11 @@ const Home = () => {
     })
     .then((m_response) =>{
       setPname(m_response.data.name)
+      setLogged(true)
     })
     .catch((err) =>{
       console.log(err)
+      setLogged(false)
     })
   },[])
   if(b1 && !order.includes('Milk')){
@@ -227,9 +230,17 @@ const Home = () => {
         <div className='flex backdrop-filter backdrop-blur-lg border-b-2 absolute z-10 w-full items-center justify-between'>
         <h1 className=' font-Poppins text-4xl mx-4 my-3'>MilkyWay</h1>
         <div>
-        <p className='text-2xl mr-10'>Hi, {name}</p>
-        <button className='' onClick={handleLogout}>Log Out</button>
-        </div>
+          {
+            logged
+            ?
+              <div>
+              <p className='text-2xl mr-10'>Hi, {pname}</p>
+              <button className='' onClick={handleLogout}>Log Out</button> 
+              </div>
+            :
+              <Link href='/userLogin'><button className='bg-orange-500 mr-10 rounded-xl cursor-pointer py-3 px-6 text-white text-xl'>Log In</button></Link>
+          }
+          </div>
 
         </div>
         
@@ -240,7 +251,7 @@ const Home = () => {
         <button></button>
         {
           data.map((providers)=>{
-            console.log(providers)
+            // console.log(providers)
             return(
         <Draggable offset={[60, 87]} onDragStart={()=>{
           setOpen(true);
