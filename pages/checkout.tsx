@@ -4,124 +4,157 @@ import curd from '../images/curd.png';
 import paneer from '../images/panner.png';
 import lassi from '../images/lassi.png';
 import ghee from '../images/ghee.png';
-import { useContext } from 'react';
+import { useRouter } from 'next/router';
+import { useContext, useState, useEffect, useRef } from 'react';
 import AppContext from '../AppContext'
+import dynamic from 'next/dynamic';
+import axios from 'axios'
+import Link from 'next/link';
 
 const Checkout = () => {
+
+    const router = useRouter();
+    const data = router.query;
+    console.log(data)
+    const [items, setItems] = useState(data.items);
+    const [prices, setPrices] = useState(data.prices);
+    const [pnum, setPnum] = useState('');
+    const [uid, setUid] = useState('');
+    const [address, setAddress] = useState();
+    const [lat, setLat] = useState('');
+    const [long, setLong] = useState('')
+    const [pid, setPid] = useState(data.pid);
+    const [quantity, setQuantity] = useState([]);
+    const zip = (...rows) => [...rows[0]].map((_,c) => rows.map(row => row[c]))
+    const [collect, setCollect] = useState(zip(items, prices, quantity ))
+    console.log(items,prices, collect, quantity)
+    const [vname, setVname] = useState('')
+
+    var sum = 0;
+
+    useEffect(() =>{
+        axios.get('http://localhost:5000/api/auth/me',{
+            withCredentials:true,
+        })
+        .then((response) => {
+            setUid(response.data.id)
+            console.log(response)
+        })
+        .catch((err) => {console.log(err)})
+    },[])
+
+    for(var i=0; i<prices.length; i++) {
+        // prices[i] = parseInt(prices[i])
+        sum+=parseInt(prices[i])
+    }
+
+    axios.post('http://localhost:5000/api/auth/providerPostMe',{
+        providerID:data.pid
+    })
+    .then((response) => {
+        console.log(response)
+        setVname(response.data.name)
+        setAddress(response.data.address)
+        setPnum(response.data.mobileNum)
+        setLat(response.data.lat)
+        setLong(response.data.long)
+
+    })
+    .catch((err) => {console.log(err)})
+    
+
+    const postDetails = () =>{
+        
+        axios.post('http://localhost:5000/api/orders',{
+            items:items, 
+            prices:prices,
+            providerID:pid,
+
+            // userID:uid,
+        },{
+            withCredentials:true,
+        })
+        .then((response) => {console.log(response)})
+        .catch((err) => {console.log(err)})
+
+        axios.post('http://localhost:5000/api/providerStock/orderForProvider',{
+            userID:uid,
+            providerID:pid,
+            items:items,
+            prices:prices,
+            quant:quantity,
+            total:sum
+        })
+        .then((response) => {console.log(response)})
+        .catch((err) => {console.log(err)})
+    }
+    
+
+    // console.log(item)
+
+    
+
+
+//   useEffect(() =>{
+//       setItems()
+//       setPrices()
+//       console.log(items, prices)
+//     //   console.log(JSON.parse(localStorage.getItem('Items')))
+//   },[items, prices])
   const value = useContext(AppContext);
   let { languageSelected } = value.state;
   let {milkyway, slogan, login, signup, about, byline,p1,p2,p3,rb, rs, close}  = value.state.languages;
   console.log(languageSelected)
+  var maps_url = `http://maps.google.co.uk/maps?q=${lat},${long}`
+  
   return (
     <div className='min-h-screen pb-20 bg-[#5fc5fb]'>
         <div>
             <h1 className='text-white font-Poppins text-3xl ml-10 py-3'>{milkyway}</h1>
         </div>
         <div className='bg-white rounded-xl shadow-2xl mb-20 space-y-8 mt-16 mx-40'>
-            <h1 className='text-center text-4xl font-bold py-8  '>Your Basket</h1>
-            <div className='flex items-center justify-between mx-8 shadow-xl rounded-xl'>
-                <div className='flex items-center '>
-                <img src={milk.src} className='h-40'></img>
-                <h1 className='text-2xl text-slate-500 font-semibold'>Milk</h1>
-                </div>
-                <div className=''>
-                    <h1 className='text-xl pb-1'>Quantity</h1>
-                    <div className='flex items-center space-x-4'>
-                    <input className='border border-blue-600 shadow-blue-600 shadow-md  rounded-lg px-2 py-1 outline-none w-1/2 '></input>
-                    <h1>ml</h1>
+            <h1 className='text-center text-4xl font-bold py-8'>Your Basket</h1>
+            <div className=' items-center justify-end mx-8 shadow-xl rounded-xl'>
+            {
+            collect.map((item) =>{
+                return(
+                    <div className='flex justify-end items-center mx-8  my-5 px-3 py-5 rounded-xl '>
+                        <h1 className='text-3xl font-bold'>{item[0]}</h1>
+                        <div className='mx-auto'>
+                        <h1>Quantity: 1kg</h1>    
+                        {/* <input placeholder='Enter Quantity in Kgs' value={item[2]} onChange={(e)=>{setQuantity([...quantity,e.target.value])}}></input>
+                        <button onClick={(e)=>{setQuantity([...quantity,e.target.value])}}></button> */}
+                        </div>
+                        <h1 className='text-2xl '><span className='text-red-500'>Price:</span> {item[1]}</h1>
                     </div>
-                </div>
-                <div>
-                    <h1 className='text-xl mr-8'><span className='text-red-600'>Price:</span> ₹260/-</h1>
-                </div>
-            </div>
-            <div className='flex items-center justify-between shadow-xl rounded-xl py-6 mx-8'>
-                <div className='flex items-center'>
-                <img src={curd.src} className='h-20 ml-16'></img>
-                <h1 className='text-2xl text-slate-500 ml-20 font-semibold'>Curd</h1>
-                </div>
-                <div className=''>
-                    <h1 className='text-xl pb-1'>Quantity</h1>
-                    <div className='flex items-center space-x-4'>
-                    <input className=' border-blue-600 shadow-md   shadow-blue-600 rounded-lg px-2 py-1 outline-none w-1/2 border'></input>
-                    <h1>ml</h1>
-                    </div>
-                </div>
-                <div>
-                    <h1 className='text-xl mr-8'><span className='text-red-600'>Price:</span> ₹260/-</h1>
-                </div>
-            </div>
-            <div className='flex items-center justify-between mx-8 shadow-xl rounded-xl'>
-                <div className='flex items-center'>
-                <img src={paneer.src} className='h-40 ml'></img>
-                <h1 className='text-2xl text-slate-500 font-semibold ml-5'>Paneer</h1>
-                </div>
-                <div className=''>
-                    <h1 className='text-xl pb-1'>Quantity</h1>
-                    <div className='flex items-center space-x-4'>
-                    <input className=' border-blue-600 shadow-md shadow-blue-600 rounded-lg px-2 py-1 outline-none w-1/2 border'></input>
-                    <h1>ml</h1>
-                    </div>
-                </div>
-                <div>
-                    <h1 className='text-xl mr-8'><span className='text-red-600'>Price:</span> ₹260/-</h1>
-                </div>
-            </div>
-            <div className='flex items-center justify-between mx-8 shadow-xl py-8  rounded-xl'>
-                <div className='flex items-center'>
-                <img src={lassi.src} className='h-20 ml-12 '></img>
-                <h1 className='text-2xl text-slate-500 ml-20 font-semibold '>Lassi</h1>
-                </div>
-                <div className=''>
-                    <h1 className='text-xl pb-1'>Quantity</h1>
-                    <div className='flex items-center space-x-4'>
-                    <input className=' border-blue-600 shadow-md shadow-blue-600 rounded-lg px-2 py-1 outline-none w-1/2 border'></input>
-                    <h1>ml</h1>
-                    </div>
-                </div>
-                <div>
-                    <h1 className='text-xl mr-8'><span className='text-red-600'>Price:</span> ₹260/-</h1>
-                </div>
-            </div>
-            <div className='flex items-center justify-between mt-4 mx-8 shadow-xl rounded-xl py-8'>
-                <div className='flex items-center'>
-                <img src={ghee.src} className='h-24 ml-5 '></img>
-                <h1 className='text-2xl text-slate-500 font-semibold ml-10'>Ghee</h1>
-                </div>
-                <div className=''>
-                    <h1 className='text-xl pb-1'>Quantity</h1>
-                    <div className='flex items-center space-x-4'>
-                    <input className=' border-blue-600 shadow-md shadow-blue-600 rounded-lg px-2 py-1 outline-none w-1/2 border'></input>
-                    <h1>ml</h1>
-                    </div>
-                </div>
-                <div>
-                    <h1 className='text-xl mr-8'><span className='text-red-600'>Price:</span> ₹260/-</h1>
-                </div>
+                );
+            })
+        }
             </div>
             <div className='text-right mr-8 text-xl mt-8 pb-8'>
-                <p>Total: ₹260/-</p>
+                <p>Total: ₹{sum}/-</p>
             </div>
         </div>
         <div className='bg-white mx-40 rounded-xl px-8 py-8 shadow-2xl'>
             <h1 className='text-3xl font-bold text-center mb-8 '>Vendor Details</h1>
             <div className='flex justify-between'>    
-            <p className='text-2xl font-bold'>Bhupesh Singhania</p>
+            <p className='text-2xl font-bold'>{vname}</p>
             <div>
-                <h1>Rating:</h1>
-                <p> 69 Stars(stars add krdunga m yaha)</p>
+                <a href={maps_url} className='bg-orange-500 text-white px-6 py-3 rounded-xl text-xl'>Locate on Map</a>
             </div>
             </div>
-            <p>Address: Chawl m rehta h bhadwa basically</p>
-            <p>Contact: +91-6969696969</p>
+            <p>Address: {address}</p>
+            <p>Contact:{pnum}</p>
         </div>
 
         <div className='text-center mt-20'>
-            <button className='text-white bg-blue-600 py-2 px-5 text-2xl rounded-xl hover:scale-110 hover:-translate-y-1 transition'>Proceed to Checkout </button>
+            <Link href='/orderSucces'><button className='text-white bg-blue-600 py-2 px-5 text-2xl rounded-xl hover:scale-110 hover:-translate-y-1 transition' onClick={postDetails}>Proceed to Checkout </button></Link>
         </div>
 
     </div>
   )
 }
 
-export default Checkout
+export default dynamic(() => Promise.resolve(Checkout), { 
+    ssr: false 
+})

@@ -37,7 +37,7 @@ const Home = () => {
   const [items, setItems] = useState([])
   const [prices, setPrices] = useState([])
   const [collect, setCollect] = useState([])
-  
+  const [uid, setUid] = useState('')
 
   const handleLogout = () => {
       axios.get('http://localhost:5000/api/auth/logout',
@@ -56,14 +56,29 @@ const Home = () => {
   }
 
   const checkout = () => {
-    localStorage.setItem('seller',pname)
-    localStorage.setItem('Items',JSON.stringify(items))
-    localStorage.setItem('Prices',JSON.stringify(prices))
+      // localStorage.setItem('seller',pname)
+      // localStorage.setItem('Items',JSON.stringify(items))
+      // localStorage.setItem('Prices',JSON.stringify(prices))
+      // localStorage.setItem('lat',latitude)
+      // localStorage.setItem('long',longitude)
+      // localStorage.setItem('pid',pid)
+      axios.put('http://localhost:5000/api/orders/coords',{
+        userID:uid,
+        lat:latitude,
+        long:longitude,
+      },{
+        withCredentials:true,
+      })
+      .then((response)=>{console.log(response)})
+      .catch((error)=>{console.log(error)})
   }
 
-  useEffect(() =>{
+  const getItems = (providers) => {
+    setOpen(true)
+    setPname(providers.name)
+    setPid(providers.id)
     axios.post('http://localhost:5000/api/providerStock/getProviderItemsData',{
-      providerID: pid
+      providerID: providers.id
     })
     .then((response) =>{
       setItems(response.data.items)
@@ -74,8 +89,7 @@ const Home = () => {
     const zip = (items, prices) => items.map((x, i) => [x, prices[i]]);
     setCollect(zip(items, prices))
     console.log(collect) 
-  },[ pid])
-
+  }
  
     
 
@@ -100,6 +114,7 @@ const Home = () => {
     })
     .then((m_response) =>{
       setPname(m_response.data.name)
+      setUid(m_response.data.id)
       setLogged(true)
     })
     .catch((err) =>{
@@ -199,6 +214,7 @@ const Home = () => {
         <p><AiFillCloseCircle className='mx-auto text-3xl mt-5' onClick={()=>{setOpen(false)}}></AiFillCloseCircle></p>
         
         <h1 className='text-center mt-6 text-3xl font-bold'>{pname}</h1>
+        {/* <h1>{pid}</h1> */}
         <p className='mt-5 ml-4 text-lg'>Contact No.: Birjesh ka contact number</p>
         <p className='mt-3 mx-4 text-lg mb-3'>Address: Tere ghar k piche, teri khidki k niche</p>
         <div className='mx-4 '>
@@ -231,7 +247,13 @@ const Home = () => {
         }
         <div className='flex space-x-4 mx-5 mt-8'>
           <button className='bg-orange-500 shadow-2xl text-white px-3 py-2 rounded-lg '>Download Lab Report</button>
-          <Link href={{pathname:'/checkout'}}><button className='text-center shadow-2xl bg-orange-500 text-white px-3 py-2 rounded-lg' onClick={checkout}>Proceed further with this option</button></Link>          
+          {
+            logged
+            ?
+          <Link href={{pathname:'/checkout',query:{items:items, prices:prices, pid:pid}}}><button className='text-center shadow-2xl bg-orange-500 text-white px-3 py-2 rounded-lg' onClick={checkout}>Proceed further with this option</button></Link> 
+          :
+          <Link href={{pathname:'/userLogin'}}><button className='text-center shadow-2xl bg-orange-500 text-white px-3 py-2 rounded-lg' onClick={checkout}>Log In to order</button></Link>                   
+          }
         </div>
 
         
@@ -240,12 +262,14 @@ const Home = () => {
         </AnimatePresence>
         <div className='flex backdrop-filter backdrop-blur-lg border-b-2 absolute z-10 w-full items-center justify-between'>
         <h1 className=' font-Poppins text-4xl mx-4 my-3'>MilkyWay</h1>
+        <p>Do a double click over the bottles to see the stats</p>
         <div>
           {
             logged
             ?
               <div>
               <p className='text-2xl mr-10'>Hi, {pname}</p>
+              
               <button className='' onClick={handleLogout}>Log Out</button> 
               </div>
             :
@@ -265,15 +289,18 @@ const Home = () => {
 
             return(
           <Draggable offset={[60, 87]} onDragStart={()=>{
-          setOpen(true);
-          setPname(providers.name);
-          setPid(providers.id)
-          // getItems();        
+          // setOpen(true);
+          // setPname(providers.name);
+          // setPid(providers.id)
+          // getItems();
+          getItems(providers);   
+          getItems(providers);       
         }} onDragMove={()=>{
-          setOpen(true);
-          setPname(providers.name);
-          setPid(providers.id)
-          // getItems();  
+          // setOpen(true);
+          // setPname(providers.name);
+          // setPid(providers.id)
+          getItems(providers);
+          getItems(providers);    
         }} anchor={[providers.lat, providers.long]} >
         <img src={milk_pin.src} width={20} height={10} alt="Pigeon!" />
         </Draggable>

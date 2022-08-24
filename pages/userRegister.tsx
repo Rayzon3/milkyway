@@ -6,7 +6,7 @@ const UserRegister = () => {
   const [name ,setName] = useState('')
   const [email, setEmail] = useState('')
   const [pass ,setPass] = useState('')
-  const [pnum, setPnum] = useState(0)
+  const [pnum, setPnum] = useState('')
   const [address, setAddress] = useState('')
   const router = useRouter()
   
@@ -26,7 +26,7 @@ const UserRegister = () => {
     setName('')
     setEmail('')
     setPass('')
-    setPnum(0)
+    setPnum('')
     setAddress('')
   }
 
@@ -66,7 +66,7 @@ const UserRegister = () => {
           </div>
           <input
             id="number"
-            type="number"
+            type="text"
             className="p-2 m-2 rounded-md border-gray-300 w-full border-b-2 focus:outline-none focus:border-cyan-400"
             placeholder='Enter Phone Number'
             required

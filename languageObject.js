@@ -14,6 +14,8 @@ let languageObject={
         close:"Close",
         eemail:"Enter Email",
         password: "Enter Password",
+        lb:"Login as a Buyer",
+        ls:"Login as a Seller",
 
 
     },
@@ -31,7 +33,9 @@ let languageObject={
         rs:"एक विक्रेता के रूप में पंजीकरण करें",
         close:"बंद करे",
         eemail:"ईमेल दर्ज करें",
-        password:"पास वर्ड दर्ज करें"
+        password:"पास वर्ड दर्ज करें",
+        ls:"विक्रेता के रूप में लॉगिन करें",
+        lb:"खरीदार के रूप में लॉगिन करें"
     }
 }
 
