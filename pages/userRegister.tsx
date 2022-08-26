@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import axios from 'axios'
 import Link from 'next/link'
-import {useRouter} from 'next/router'
+
 const UserRegister = () => {
   const [name ,setName] = useState('')
   const [email, setEmail] = useState('')
@@ -10,7 +10,7 @@ const UserRegister = () => {
   const [address, setAddress] = useState('')
   const [district, setDistrict] = useState('')
   const [state, setState] = useState('')
-  const router = useRouter()
+
   
   const handleSubmit = () => {
     axios.post('http://localhost:5000/api/auth/register',{

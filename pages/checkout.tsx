@@ -16,17 +16,17 @@ const Checkout = () => {
     const router = useRouter();
     const data = router.query;
     console.log(data)
-    const [items, setItems] = useState(data.items);
-    const [prices, setPrices] = useState(data.prices);
+    const [items] = useState(data.items);
+    const [prices] = useState(data.prices);
     const [pnum, setPnum] = useState('');
     const [uid, setUid] = useState('');
     const [address, setAddress] = useState();
     const [lat, setLat] = useState('');
     const [long, setLong] = useState('')
-    const [pid, setPid] = useState(data.pid);
-    const [quantity, setQuantity] = useState([]);
+    const [pid] = useState(data.pid);
+    const [quantity] = useState([]);
     const zip = (...rows) => [...rows[0]].map((_,c) => rows.map(row => row[c]))
-    const [collect, setCollect] = useState(zip(items, prices, quantity ))
+    const [collect] = useState(zip(items, prices, quantity ))
     console.log(items,prices, collect, quantity)
     const [vname, setVname] = useState('')
 
@@ -44,7 +44,7 @@ const Checkout = () => {
     },[])
 
     for(var i=0; i<prices.length; i++) {
-        // prices[i] = parseInt(prices[i])
+
         sum+=parseInt(prices[i])
     }
 
