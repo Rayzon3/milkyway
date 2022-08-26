@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import axios from 'axios'
-import { scaleQuantile } from 'd3-scale';
+
 import { 
     ComposableMap, Geographies, Geography 
   } from 'react-simple-maps';
@@ -58,10 +58,6 @@ import {
   };
 
   const data = getHeatMapData()
-
-  const COLOR_RANGE = [
-    '#2596be'
-  ];
 
   const geographyStyle = {
     default: {

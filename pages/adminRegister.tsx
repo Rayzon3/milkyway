@@ -7,7 +7,7 @@ const AdminRegister = () => {
   const [name ,setName] = useState('')
   const [email, setEmail] = useState('')
   const [pass ,setPass] = useState('')
-//   const [pnum, setPnum] = useState('')
+
   const router = useRouter()
   
   const handleSubmit = () => {

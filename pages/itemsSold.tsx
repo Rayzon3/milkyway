@@ -6,7 +6,6 @@ import lassi from '../images/lassi.png';
 import ghee from '../images/ghee.png';
 import {MdClose} from 'react-icons/md'
 import { useState , useEffect } from 'react';
-import {arrayMoveImmutable} from 'array-move';
 import {useRouter} from 'next/router'
 import axios from 'axios'
 const ItemsSold = () => {

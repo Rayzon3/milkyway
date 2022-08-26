@@ -8,18 +8,12 @@ const LiveOrders = () => {
     const [user, setUser] = useState([])
     const [sum, setSum] = useState(0)
     const zip = (items, prices) => items.map((x, i) => [x, prices[i]]);
-    // console.log(zip(user, orders))
 
     const mix = zip(user, orders)
     console.log(mix)
     
-    // const [uid, setUid] = useState('')
-    // const [username, setUsername] = useState([])
 
     let promises = []
-    // Promise.all(orders.map(u => {
-    // })).then((response)=>{console.log(response)})
-    // .catch((error)=>{console.log(error)})
     
     useEffect(() =>{
         axios.get('http://localhost:5000/api/providerStock/getLiveOrder',{
@@ -37,12 +31,6 @@ const LiveOrders = () => {
             promises.push(axios.post('http://localhost:5000/api/auth/postMe',{
                 uid: orders[i].userID
             }))
-            // .then((response)=>{
-            // setName(response.data.name)
-            // console.log(name)
-            // })
-            // .catch((error)=>{console.log(error)})
-            
         }
     
         Promise.all(promises)
@@ -62,10 +50,6 @@ const LiveOrders = () => {
         .catch((error)=>{console.log(error)})
 
         window.location.href=window.location.href
-
-    }
-
-    const decline = ()=>{
 
     }
 
