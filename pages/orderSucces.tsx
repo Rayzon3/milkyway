@@ -23,23 +23,25 @@ const OrderSucces = () => {
             console.log(response)
             setItems(response.data.items)
             setPid(response.data.providerID)
+            axios.post('http://localhost:5000/api/auth/providerPostMe',{
+            providerID:pid,
+            })
+            .then((response)=>{
+                if(response.data.name){
+                    setVname(response.data.name)
+                }
+                setAddress(response.data.address)
+                setLat(response.data.lat)
+                setLong(response.data.long)
+                setNum(response.data.mobileNum)
+                console.log(response)
+            })
+            .catch((error)=>{console.log(error)})
         })
         .catch((error)=>{console.log(error)})
 
     },[])
     
-    axios.post('http://localhost:5000/api/auth/providerPostMe',{
-    providerID:pid,
-    })
-    .then((response)=>{
-        setVname(response.data.name)
-        setAddress(response.data.address)
-        setLat(response.data.lat)
-        setLong(response.data.long)
-        setNum(response.data.mobileNum)
-        console.log(response)
-    })
-    .catch((error)=>{console.log(error)})
     const map_url = `http://maps.google.co.uk/maps?q=${lat},${long}`
     
 
