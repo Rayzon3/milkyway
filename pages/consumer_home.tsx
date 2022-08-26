@@ -352,8 +352,7 @@ const Home = () => {
         
     <div>
         <Map animate={true} height={1000} center={[latitude, longitude]} defaultZoom={18}>
-        <Marker  anchor={[latitude, longitude]} >
-        </Marker>
+        <Marker  anchor={[latitude, longitude]} />
         {
           data.map((providers)=>{
 
