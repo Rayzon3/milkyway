@@ -338,7 +338,7 @@ const Home = () => {
             logged
             ?
               <div>
-              <p className='lg:text-2xl text-xl mr-3 lg:mr-10'>Hi, {pname}</p>
+              <Link><p className='lg:text-2xl text-xl mr-3 lg:mr-10'>Hi, {pname}</p></Link>
               
               <button className='' onClick={handleLogout}>Log Out</button> 
               </div>
