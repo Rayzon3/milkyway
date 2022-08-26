@@ -86,28 +86,31 @@ const producerHistory = () => {
                     var maps_url = `http://maps.google.co.uk/maps?q=${order[0].lat},${order[0].long}`
                     return(
                         <div className='mt-10'>
-                            <div className='mx-20 border shadow-xl p-4 rounded-xl '>
+                            <div className= 'mx-3 lg:mx-20 border shadow-xl p-4 rounded-xl '>
                                 <div className='flex justify-between'>
                                 <div>
-                                <h1 className='text-2xl font-bold'>Name:</h1>
-                                <h1 className='font-bold text-3xl'>{order[0].data.name}</h1>
+                                <h1 className='lg:text-2xl text-xl font-bold'>Name:</h1>
+                                <h1 className='font-bold text-2xl lg:text-3xl'>{order[0].data.name}</h1>
                                 </div>   
-                                <div>
-                                <h1 className='text-2xl font-bold'>Address:</h1>
-                                <h1 className='text-2xl '>{order[0].data.address}</h1>
                                 </div>
-                                </div>
-                                <div className='flex justify-between'>
+                                <div className='lg:flex justify-between'>
                                 <div className=''>
-                                <h1 className='text-2xl font-bold'>Items:</h1>
-                                <h1 className='flex text-2xl  space-x-2'>{order[1].items.map((item)=>{return<h1 className=''>{item},</h1>})}</h1>
+                                <h1 className='lg:text-2xl text-xl font-bold'>Items:</h1>
+                                <h1 className='lg:flex text-xl lg:text-2xl  '>{order[1].items.map((item)=>{return<h1 className=''>{item},</h1>})}</h1>
+                                </div>
+                                <div>
+                                <div>
+                                <h1 className='lg:text-2xl text-xl font-bold'>Address:</h1>
+                                <h1 className='lg:text-2xl text-xl'>{order[0].data.address}</h1>
                                 </div>
                                 <div className='mr-32'>
-                                <h1 className='text-2xl  font-bold'>Mobile Number:</h1>
-                                <h1 className='text-2xl'>{order[0].data.mobileNum}</h1>
+                                <h1 className='lg:text-2xl text-xl  font-bold'>Mobile Number:</h1>
+                                <h1 className='lg:text-2xl text-xl'>{order[0].data.mobileNum}</h1>
                                 </div>   
+
                                 </div>
-                                <h1 className='text-2xl pb-6 font-bold'>Total:</h1>
+                                </div>
+                                <h1 className='lg:text-2xl text-xl pb-6 font-bold'>Total: ₹ {order[1].total} /-</h1>
                                 <div className='text-center'>
                                 <a href={maps_url} className='text-xl bg-orange-500 text-white px-6 py-3 rounded-xl mt-6'>Locate on Maps</a>
                                 </div>

@@ -12,6 +12,57 @@ import Link from 'next/link';
 import axios from 'axios';
 import {motion, AnimatePresence} from 'framer-motion'
 import { useRouter } from "next/router"
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+export const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'top' as const,
+    },
+    title: {
+      display: true,
+      text: 'pH levels',
+    },
+  },
+  maintainAspectRatio: false 
+};
+
+
+
+const labels = ['28th August', '29th August', '30th August', '31st August', '1st September', '2nd September', '3rd September'];
+
+const data2 = {
+  labels,
+  datasets: [
+    {
+      label: 'Rates on different days',
+      data: [70,40,55,29,32,47, 80],
+      borderColor: '#5fc5fb',
+      backgroundColor: 'rgb(255, 255, 255)',
+    },
+  ],
+};
 
 
 const Home = () => {
@@ -29,7 +80,7 @@ const Home = () => {
   const [b4, setB4] = useState(false)
   const [b5, setB5] = useState(false)
   const [order, setOrder] = useState([])
-  const [name, setName] = useState('')
+  const [address, setAddress] = useState('')
   const [link, setLink] = useState('')
   const [data, setData] = useState([])
   const [logged, setLogged] = useState(false)
@@ -38,6 +89,8 @@ const Home = () => {
   const [prices, setPrices] = useState([])
   const [collect, setCollect] = useState([])
   const [uid, setUid] = useState('')
+  const [num, setNum] = useState('')
+  const [uname, setUname] = useState('')
 
   const handleLogout = () => {
       axios.get('http://localhost:5000/api/auth/logout',
@@ -56,12 +109,6 @@ const Home = () => {
   }
 
   const checkout = () => {
-      // localStorage.setItem('seller',pname)
-      // localStorage.setItem('Items',JSON.stringify(items))
-      // localStorage.setItem('Prices',JSON.stringify(prices))
-      // localStorage.setItem('lat',latitude)
-      // localStorage.setItem('long',longitude)
-      // localStorage.setItem('pid',pid)
       axios.put('http://localhost:5000/api/orders/coords',{
         userID:uid,
         lat:latitude,
@@ -77,6 +124,9 @@ const Home = () => {
     setOpen(true)
     setPname(providers.name)
     setPid(providers.id)
+    setAddress(providers.address)
+    setNum(providers.mobileNum)
+    // setUid(providers.data.id)
     axios.post('http://localhost:5000/api/providerStock/getProviderItemsData',{
       providerID: providers.id
     })
@@ -114,8 +164,8 @@ const Home = () => {
     })
     .then((m_response) =>{
       setPname(m_response.data.name)
-      setUid(m_response.data.id)
       setLogged(true)
+      console.log(num)
     })
     .catch((err) =>{
       console.log(err)
@@ -206,23 +256,27 @@ const Home = () => {
       {
         
         open &&
-      <motion.div className={'w-1/4 fixed rounded-xl bg-[#5fc5fb] z-20 right-0 h-full '}
+      <motion.div className={'lg:w-1/4 w-1/2 fixed rounded-xl bg-white z-20 right-0 h-full '}
       initial={{x:300, opacity:0}}
       animate={{x:0, opacity:1}}
       exit={{x:300,opacity:0}}
       >
         <p><AiFillCloseCircle className='mx-auto text-3xl mt-5' onClick={()=>{setOpen(false)}}></AiFillCloseCircle></p>
         
-        <h1 className='text-center mt-6 text-3xl font-bold'>{pname}</h1>
+        <h1 className='text-center mt-6 text-2xl lg:text-3xl font-bold'>{pname}</h1>
         {/* <h1>{pid}</h1> */}
-        <p className='mt-5 ml-4 text-lg'>Contact No.: Birjesh ka contact number</p>
-        <p className='mt-3 mx-4 text-lg mb-3'>Address: Tere ghar k piche, teri khidki k niche</p>
+        <p className='mt-5 text-center  lg:text-left lg:ml-4 lg:text-lg'><span className='font-bold'>Contact No<br></br></span> {num}</p>
+        <p className='mt-5 text-center lg:text-left lg:ml-4 lg:text-lg'><span className='font-bold'>Address<br></br></span> {address}</p>
         <div className='mx-4 '>
-    
-        <Map animate={true} height={200}  center={[latitude,longitude]} defaultZoom={18} zoom={10} minZoom={1} maxZoom={1}>
+          {/* <div className='hidden lg:block'>
+        <Map  animate={true} height={200}  center={[latitude,longitude]} defaultZoom={18} zoom={10} minZoom={1} maxZoom={1}>
         <Marker  anchor={[latitude,longitude]}>
         </Marker>
         </Map> 
+          </div> */}
+        <div className='h-60  mx-auto'>
+          <Line options={options} data={data2}   />
+        </div>  
         
         </div>
         {   
@@ -231,7 +285,7 @@ const Home = () => {
               if(item!=null){
                 // console.log('Not null')
                 return(
-                    <div className='flex justify-between items-center mx-8 my-2 '>
+                    <div className='flex justify-between items-center lg:mx-8 mx-3 my-2 '>
                         <h1 className='text-xl font-bold'>{item[0]}</h1>
                         <h1 className='text-xl '><span className='text-red-500'>Price:</span> {item[1]}</h1>
                     </div>
@@ -245,14 +299,15 @@ const Home = () => {
               }
             })
         }
-        <div className='flex space-x-4 mx-5 mt-8'>
-          <button className='bg-orange-500 shadow-2xl text-white px-3 py-2 rounded-lg '>Download Lab Report</button>
+        {/* 16.442008009456778, 80.62261605481285 */}
+        <div className='  space-y-4 lg:space-y-0  lg:space-x-4 mx-3 text-center mt-8'>
+          {/* <button className='bg-orange-500 shadow-2xl text-white px-3 py-2 rounded-lg '>Download Lab Report</button> */}
           {
             logged
             ?
-          <Link href={{pathname:'/checkout',query:{items:items, prices:prices, pid:pid}}}><button className='text-center shadow-2xl bg-orange-500 text-white px-3 py-2 rounded-lg' onClick={checkout}>Proceed further with this option</button></Link> 
+          <Link href={{pathname:'/checkout',query:{items:items, prices:prices, pid:pid}}}><button className='text-center text-xl shadow-2xl hover:scale-110 hover:-translate-x-1 transition bg-[#5fc5fb] text-white px-3 py-2 rounded-lg' onClick={checkout}>Proceed further with this option</button></Link> 
           :
-          <Link href={{pathname:'/userLogin'}}><button className='text-center shadow-2xl bg-orange-500 text-white px-3 py-2 rounded-lg' onClick={checkout}>Log In to order</button></Link>                   
+          <Link href={{pathname:'/userLogin'}}><button className='text-center shadow-2xl bg-orange-500 hover:scale-110 hover:-translate-x-1 transition text-white px-3 py-2 rounded-lg' onClick={checkout}>Log In to order</button></Link>                   
           }
         </div>
 
@@ -261,14 +316,14 @@ const Home = () => {
       }
         </AnimatePresence>
         <div className='flex backdrop-filter backdrop-blur-lg border-b-2 absolute z-10 w-full items-center justify-between'>
-        <h1 className=' font-Poppins text-4xl mx-4 my-3'>MilkyWay</h1>
-        <p>Do a double click over the bottles to see the stats</p>
+        <h1 className=' font-Poppins text-2xl lg:text-4xl mx-4 my-3'>MilkyWay</h1>
+        <p className='hidden lg:block'>Do a double click over the bottles to see the stats</p>
         <div>
           {
             logged
             ?
               <div>
-              <p className='text-2xl mr-10'>Hi, {pname}</p>
+              <p className='lg:text-2xl text-xl mr-3 lg:mr-10'>Hi, {pname}</p>
               
               <button className='' onClick={handleLogout}>Log Out</button> 
               </div>
@@ -280,10 +335,9 @@ const Home = () => {
         </div>
         
     <div>
-        <Map animate={true} height={600} center={[latitude, longitude]} defaultZoom={18}>
+        <Map animate={true} height={1000} center={[latitude, longitude]} defaultZoom={18}>
         <Marker  anchor={[latitude, longitude]} >
         </Marker>
-        <button></button>
         {
           data.map((providers)=>{
 
@@ -308,29 +362,12 @@ const Home = () => {
             );
           })
         }
-        {/* <Overlay  anchor={[28.48023399258176,77.00900000000001]} >
-        <img src={milk_pin.src} width={20} height={10} alt="Pigeon!" />
-        </Overlay>
-        <Overlay  anchor={[28.48023399258176,77.00700000000001]} >
-        <img src={milk_pin.src} width={20} height={10} alt="Pigeon!" />
-        </Overlay>
-        <Overlay  anchor={[28.48103399258176,77.00800000000001]} >
-        <img src={milk_pin.src} width={20} height={10} alt="Pigeon!" />
-        </Overlay>
-        <Overlay  anchor={[28.48103399258176,77.01000000000001]} >
-        <img src={milk_pin.src} width={20} height={10} alt="Pigeon!" />
-        </Overlay>
-        <Overlay  anchor={[28.48103399258176,77.01000000000001]} >
-        <img src={milk_pin.src} width={20} height={10} alt="Pigeon!" />
-        </Overlay>
-        <Overlay  anchor={[28.48103399258176,77.01100000000001]} >
-        <img src={milk_pin.src} width={20} height={10} alt="Pigeon!" />
-        </Overlay> */}
+        
         </Map>
     </div>
       
     </div>
-    <div className='rounded-2xl shadow-2xl bg-green-400  -mt-8 pb-8 absolute w-full text-white '>
+    {/* <div className='rounded-2xl shadow-2xl bg-green-400  -mt-8 pb-8 absolute w-full text-white '>
         <h1 className='text-center py-8 text-black font-bold text-4xl'>What are you craving today?</h1>
         <div className='grid grid-cols-5 gap-8 px-10 '>
             <div className={b1?'bg-amber-600 rounded-2xl transition':'transition rounded-2xl'} onClick={()=>{setB1(!b1)}}>
@@ -354,7 +391,7 @@ const Home = () => {
                 <p className='text-center text-2xl mt-8 font-Poppins'>Ghee</p>
             </div>
         </div>
-    </div>
+    </div> */}
     </div>
   )
 }

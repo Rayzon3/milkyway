@@ -78,7 +78,7 @@ const NewOrders = () => {
     
   return (
     <div>
-        <div className='flex px-20 py-3 items-center justify-between'>
+        <div className='flex mx-3 lg:px-20 py-3 items-center justify-between'>
         <h1 className='font-Poppins text-4xl'>MilkyWay</h1>
         <button>Sign out</button>
         </div>
@@ -89,30 +89,30 @@ const NewOrders = () => {
                     var maps_url = `http://maps.google.co.uk/maps?q=${order[0].lat},${order[0].long}`
                     return(
                         <div className='mt-10'>
-                            <div className='mx-20 border shadow-xl p-4 rounded-xl '>
+                            <div className=' lg:mx-20 border shadow-xl p-4 mx-3 rounded-xl '>
                                 <div className='flex justify-between'>
                                 <div>
-                                <h1 className='text-2xl font-bold'>Name:</h1>
-                                <h1 className='font-bold text-3xl'>{order[0].data.name}</h1>
+                                <h1 className='lg:text-2xl text-xl font-bold'>Name:</h1>
+                                <h1 className='font-bold text-2xl lg:text-3xl'>{order[0].data.name}</h1>
                                 </div>   
-                                <div>
-                                <h1 className='text-2xl font-bold'>Address:</h1>
-                                <h1 className='text-2xl '>{order[0].data.address}</h1>
                                 </div>
-                                </div>
-                                <div className='flex justify-between'>
+                                <div className='lg:flex  justify-between'>
                                 <div className=''>
-                                <h1 className='text-2xl font-bold'>Items:</h1>
-                                <h1 className='flex text-2xl  space-x-2'>{order[1].items.map((item)=>{return<h1 className=''>{item},</h1>})}</h1>
+                                <h1 className='lg:text-2xl text-xl font-bold'>Items:</h1>
+                                <h1 className='flex lg:text-2xl text-xl  space-x-2'>{order[1].items.map((item)=>{return<h1 className=''>{item},</h1>})}</h1>
                                 </div>
                                 <div className='mr-16'>
-                                <h1 className='text-2xl  font-bold'>Mobile Number:</h1>
-                                <h1 className='text-2xl'>{order[0].data.mobileNum}</h1>
+                                <div>
+                                <h1 className='lg:text-2xl text-xl font-bold'>Address:</h1>
+                                <h1 className='lg:text-2xl text-xl'>{order[0].data.address}</h1>
+                                </div>
+                                <h1 className='lg:text-2xl text-xl  font-bold'>Mobile Number:</h1>
+                                <h1 className='lg:text-2xl text-xl'>{order[0].data.mobileNum}</h1>
                                 </div>   
                                 </div>
-                                <h1 className='text-2xl pb-6 font-bold'>Total:</h1>
+                                <h1 className='lg:text-2xl text-xl pb-6 font-bold'>Total: ₹ {order[1].total} /-</h1>
                                 <div className='text-center'>
-                                <a href={maps_url} className='text-xl bg-orange-500 text-white px-6 py-3 rounded-xl mt-6'>Locate on Maps</a>
+                                <a href={maps_url} className='text-xl bg-blue-600 text-white px-6 py-3 rounded-xl mt-6'>Locate on Maps</a>
                                 </div>
                                 <div className='flex mt-4 justify-around'>
                                 <button className='bg-green-500 text-xl text-white px-6 rounded-xl py-3'  onClick={()=>accept(order)}>Accept</button>

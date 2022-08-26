@@ -112,20 +112,20 @@ const Checkout = () => {
         <div>
             <h1 className='text-white font-Poppins text-3xl ml-10 py-3'>{milkyway}</h1>
         </div>
-        <div className='bg-white rounded-xl shadow-2xl mb-20 space-y-8 mt-16 mx-40'>
+        <div className='bg-white rounded-xl shadow-2xl mb-20 space-y-8 mt-16 mx-3 lg:mx-40'>
             <h1 className='text-center text-4xl font-bold py-8'>Your Basket</h1>
-            <div className=' items-center justify-end mx-8 shadow-xl rounded-xl'>
+            <div className=' items-center justify-end mx-2 lg:mx-8 shadow-xl rounded-xl'>
             {
             collect.map((item) =>{
                 return(
-                    <div className='flex justify-end items-center mx-8  my-5 px-3 py-5 rounded-xl '>
-                        <h1 className='text-3xl font-bold'>{item[0]}</h1>
+                    <div className='flex justify-end items-center mx-3 lg:mx-8  my-5 px-3 py-5 rounded-xl '>
+                        <h1 className='lg:text-3xl text-xl font-bold'>{item[0]}</h1>
                         <div className='mx-auto'>
-                        <h1>Quantity: 1kg</h1>    
+                        <h1 className='text-center'>Quantity: 1kg</h1>    
                         {/* <input placeholder='Enter Quantity in Kgs' value={item[2]} onChange={(e)=>{setQuantity([...quantity,e.target.value])}}></input>
                         <button onClick={(e)=>{setQuantity([...quantity,e.target.value])}}></button> */}
                         </div>
-                        <h1 className='text-2xl '><span className='text-red-500'>Price:</span> {item[1]}</h1>
+                        <h1 className='lg:text-2xl  text-xl'><span className='text-red-500'>Price:</span> ₹{item[1]}/-</h1>
                     </div>
                 );
             })
@@ -135,20 +135,20 @@ const Checkout = () => {
                 <p>Total: ₹{sum}/-</p>
             </div>
         </div>
-        <div className='bg-white mx-40 rounded-xl px-8 py-8 shadow-2xl'>
-            <h1 className='text-3xl font-bold text-center mb-8 '>Vendor Details</h1>
+        <div className='bg-white mx-3 lg:mx-40 rounded-xl px-8 py-8 shadow-2xl'>
+            <h1 className='lg:text-3xl  font-bold text-center mb-8 '>Vendor Details</h1>
             <div className='flex justify-between'>    
             <p className='text-2xl font-bold'>{vname}</p>
             <div>
-                <a href={maps_url} className='bg-orange-500 text-white px-6 py-3 rounded-xl text-xl'>Locate on Map</a>
+                <a href={maps_url} className='bg-blue-600 text-white px-6 py-3 hover:scale-110 hover:-translate-y-1 transition  rounded-xl text-xl'>Locate on Map</a>
             </div>
             </div>
-            <p>Address: {address}</p>
-            <p>Contact:{pnum}</p>
+            <p className='text-xl'><span className='font-bold'>Address :</span> {address}</p>
+            <p className='text-xl'><span className='font-bold'>Contact :</span> {pnum}</p>
         </div>
 
         <div className='text-center mt-20'>
-            <Link href='/orderSucces'><button className='text-white bg-blue-600 py-2 px-5 text-2xl rounded-xl hover:scale-110 hover:-translate-y-1 transition' onClick={postDetails}>Proceed to Checkout </button></Link>
+            <Link href={{pathname:'/orderSucces', query:{sum:sum}}}><button className='text-white bg-blue-600 py-2 px-5 text-2xl rounded-xl hover:scale-110 hover:-translate-y-1 transition' onClick={postDetails}>Proceed to Checkout </button></Link>
         </div>
 
     </div>

@@ -129,6 +129,7 @@ const Home: NextPage = () => {
           <source src='./milk_videos.webm' type="video/mp4" />
         </video>
         <div className='text-right'>
+         <Link href='/adminRegister' className='underline'>Admin</Link> 
         <select
           className="bg-transparent rounded-lg text-lg outline-none py-4 px-4 mt-4 placeholder-slate-800 mr-6"
           name="class"
@@ -139,11 +140,12 @@ const Home: NextPage = () => {
                 <option value="en">Language</option>
                 <option value="en">English</option>
                 <option value="hi">Hindi</option>
+                <option value='tel'>Telugu</option>
               </select>
         </div>
         <div  className='lg:flex items-center justify-between  pb-10  lg:px-28'>
         <div className='order-last'>
-        <img src={milk_cookie.src} className='h-[30rem] mr-0'></img>
+        <img src={milk_cookie.src} className='lg:h-[30rem] h-[20rem] mr-0'></img>
         </div>
         <div>
           <h1 className='lg:text-9xl text-6xl lg:text-left text-center   font-Poppins text-[#a92912]'>{milkyway}</h1>
@@ -151,10 +153,10 @@ const Home: NextPage = () => {
         </div>
       </div>
       <div className='text-center pb-8 justify-evenly  space-x-2'>
-     <button className='text-3xl text-white bg-orange-500 px-6 py-3 rounded-lg' onClick={()=>{setLoginActive(true)}}>{login}</button>
-      <button className='text-3xl text-white bg-orange-500 px-6 py-3 rounded-lg' onClick={()=>{setIsActive(true)}}>{signup}</button>
+     <button className='text-3xl text-white bg-orange-500 px-6 py-3 rounded-full hover:scale-110 hover:-translate-x-1 transition' onClick={()=>{setLoginActive(true)}}>{login}</button>
+      <button className='text-3xl text-white bg-orange-500 px-6 py-3 rounded-full hover:scale-110 hover:-translate-x-1 transition' onClick={()=>{setIsActive(true)}}>{signup}</button>
       </div>
-      <p className='pb-10'><AiOutlineArrowDown className='text-center animate-bounce text-4xl font-bold text   mx-auto'></AiOutlineArrowDown></p>
+      <p className='pb-10'><AiOutlineArrowDown className='text-center animate-bounce text-4xl font-bold text  mx-auto'></AiOutlineArrowDown></p>
       </div>
       <div className='pb-8'>
         <h1 className='text-center text-4xl lg:text-6xl my-16 font-bold'>{about}</h1>

@@ -8,6 +8,8 @@ const UserRegister = () => {
   const [pass ,setPass] = useState('')
   const [pnum, setPnum] = useState('')
   const [address, setAddress] = useState('')
+  const [district, setDistrict] = useState('')
+  const [state, setState] = useState('')
   const router = useRouter()
   
   const handleSubmit = () => {
@@ -16,13 +18,18 @@ const UserRegister = () => {
       email:email,
       password:pass,
       mobileNum:pnum,
-      address:address
+      address:address,
+      state:state,
+      district:district
     })
     .then((response) => {
-      router.push('/userLogin')
+      // router.push('/userLogin')
+      console.log(response)
     })
     .catch((error) => {console.log(error)})
     console.log(name, email, pass)
+    setDistrict('')
+    setState('')
     setName('')
     setEmail('')
     setPass('')
@@ -31,9 +38,9 @@ const UserRegister = () => {
   }
 
   return (
-    <div className='min-h-screen bg-[#5fc5fb] '>
-        <h1 className=' text-white font-Poppins text-4xl ml-4 py-8 '>MilkyWay</h1>
-        <form className='bg-white mx-auto flex flex-col justify-center w-1/2 mt-8 p-8 rounded-xl'>
+    <div className='min-h-screen pb-4 bg-[#5fc5fb] '>
+        <h1 className=' text-white font-Poppins text-4xl ml-2 lg:ml-4 py-8 '>MilkyWay</h1>
+        <form className='bg-white mx-3 lg:mx-auto flex flex-col justify-center   lg:w-1/2  p-8 rounded-xl'>
           <h1 className='font-Poppins text-3xl text-center py-3'>Register as a Buyer</h1>
           <input
             id="name"
@@ -82,8 +89,28 @@ const UserRegister = () => {
             value={address}
             onChange={(e)=>{setAddress(e.target.value)}}
           />
-          <button className='bg-[#5fc5fb] mx-32 py-2 rounded-xl mt-4 text-white text-xl' onClick={handleSubmit}>Sign Up</button>
-          <p className="text-center mt-4 text-lg">Already a user? <span className='text-blue-500'><Link href='/userLogin '>Log In here!</Link></span></p>
+          <div className='flex space-x-8 items-center'>
+            <input
+            id="name"
+            type="email"
+            className="p-2  m-2 rounded-md border-gray-300 w-full border-b-2 focus:outline-none focus:border-cyan-400"
+            placeholder='Enter District'
+            required
+            value={district}
+            onChange={(e)=>{setDistrict(e.target.value)}}
+          />
+          <input
+            id="name"
+            type="text"
+            className="p-2 m-2 rounded-md border-gray-300 w-full border-b-2 focus:outline-none focus:border-cyan-400"
+            placeholder='Enter State'
+            required
+            value={state}
+            onChange={(e)=>{setState(e.target.value)}}
+          />
+          </div>
+          <button className='bg-[#5fc5fb] mx-4 lg:mx-32 py-2 rounded-xl mt-4 text-white text-xl' onClick={handleSubmit}>Sign Up</button>
+          <p className="text-center  mt-4 text-lg">Already a user? <span className='text-blue-500'><Link href='/userLogin '>Log In here!</Link></span></p>
         </form>
     </div>
   );
