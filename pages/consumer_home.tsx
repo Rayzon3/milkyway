@@ -244,7 +244,7 @@ const Home = () => {
       }
     }
     
-    useEffect(() => setLink(`http://maps.google.co.uk/maps?q=${latitude},${longitude}`), [])
+    // useEffect(() => setLink(`http://maps.google.co.uk/maps?q=${latitude},${longitude}`), [])
     useEffect(() =>{
         if ("geolocation" in navigator) {
             // console.log('Avaiable')
@@ -253,7 +253,7 @@ const Home = () => {
             setLatitude(position.coords.latitude)
             setLongitude(position.coords.longitude)
             setAnchor([position.coords.latitude.toFixed(3), position.coords.longitude.toFixed(3)])
-            setDemo([position.coords.latitude+1, position.coords.longitude-1])
+            // setDemo([position.coords.latitude+1, position.coords.longitude-1])
             // setLink(`http://maps.google.co.uk/maps?q=${latitude},${longitude}`)
             
             // setAnchor(position.coords.longitude)
@@ -339,7 +339,7 @@ const Home = () => {
             logged
             ?
               <div>
-              <Link><p className='lg:text-2xl text-xl mr-3 lg:mr-10'>Hi, {pname}</p></Link>
+              <Link href='/userMe'><p className='lg:text-2xl text-xl mr-3 lg:mr-10'>Hi, {pname}</p></Link>
               
               <button className='' onClick={handleLogout}>Log Out</button> 
               </div>
