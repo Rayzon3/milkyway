@@ -59,8 +59,23 @@ const data2 = {
       label: 'Rates on different days',
       data: [70,40,55,29,32,47, 80],
       borderColor: '#5fc5fb',
-      backgroundColor: 'rgb(255, 255, 255)',
+      fill:true,
+      backgroundColor: '#5fc5fb',
     },
+    {
+      label:'pH levels on different days',
+      data:[6.7,6,6.5,6.6,7,7.7, 7.1],
+      borderColor :'#DE3163',
+      fill:true,
+      backgroundColor: '#DE3163',
+    },
+    {
+      label:'Temperature (°C)',
+      data:[27.3,25.32,21.32,28.21,28.2,25,24],
+      borderColor :'#800080',
+      fill:true,
+      backgroundColor: '#800080',
+    }
   ],
 };
 
@@ -274,7 +289,7 @@ const Home = () => {
         </Marker>
         </Map> 
           </div> */}
-        <div className='h-60  mx-auto'>
+        <div className='h-80  mx-auto'>
           <Line options={options} data={data2}   />
         </div>  
         

@@ -1,6 +1,29 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 import CountUp from 'react-countup';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+  } from 'chart.js';
+  import { Line } from 'react-chartjs-2';
+import { pid } from 'process';
+  
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+  );
+  
 
 
 const MilkCheck = () => {
@@ -13,7 +36,9 @@ const MilkCheck = () => {
     const [date, setDate] = useState([])
     const [temp, setTemp] = useState(0.0)
     const [odor, setOdor] = useState(0)
-    const [tdate, setTdate] = useState('')
+    const [aodor, setAodor] = useState([])
+    const [atemp, setAtemp] = useState([])
+    // const [tdate, setTdate] = useState('')
 
     var now = new Date();
     var today = String(now)
@@ -23,30 +48,47 @@ const MilkCheck = () => {
         setComp(false)
     },15000)
 
-    var arph = []
-
-    
-    axios.get('https://api.thingspeak.com/channels/1836237/feeds.json?results=2')
-    .then(response => {
-        setPH(response.data.feeds[1].field4)
-        setTemp(response.data.feeds[1].field1)
-        if(response.data.feeds[1].field3>300){
-            setOdor(1)
-        }
-        else(setOdor(0))
-        console.log(response)
-        console.log(response.data.feeds[1].field4)
-        setRes(true)
-    })
-    .catch((error) => {console.log(error)})
-
-    useEffect(() =>{
+    const options = {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top' as const,
+          },
+          title: {
+            display: true,
+            text: 'pH levels',
+          },
+        },
+        maintainAspectRatio: false 
+      };
+      
+      
+      
+      var arph = []
+      var tph = []
+      axios.get('https://api.thingspeak.com/channels/1836237/feeds.json?results=2')
+      .then(response => {
+          setPH(response.data.feeds[1].field4)
+          setTemp(response.data.feeds[1].field1)
+            if(response.data.feeds[1].field3>300){
+              setOdor(1)
+            }
+            else(setOdor(0))
+            console.log(response)
+            console.log(response.data.feeds[1].field4)
+            setRes(true)
+        })
+        .catch((error) => {console.log(error)})
+        
+        
+        useEffect(() =>{
         axios.get('http://localhost:5000/api/graphDataProvider/getGraphData',{
             withCredentials: true
         })
         .then((response) => {
             arph = response.data[0].pH
             console.log(arph)
+
             setPrice(response.data[0].rate)
             setDate(response.data[0].date)
             console.log(response)
@@ -76,16 +118,30 @@ const MilkCheck = () => {
     const handleSubmit = () => {
         arph.push(ph)
         console.log(arph)
-    axios.post('http://localhost:5000/api/graphDataProvider/postGraphData',{
+        axios.post('http://localhost:5000/api/graphDataProvider/postGraphData',{
         pH:arph,
         dates:[...date, today],
-        rates:[...price, strrate]
+        rates:[...price, strrate],
+        odor:[...aodor, odor],
+        temp:[]
+
     },{
         withCredentials: true
     })
     .then((response) => {console.log(response)})
     .catch((error) => {console.log(error)})
     }
+    const data2 = {
+        date,
+        datasets: [
+          {
+            label: 'Rates on different days',
+            data: tph,
+            borderColor: 'rgb(255, 99, 132)',
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+          },
+        ],
+      };  
     return (
         <div>
         <div className='flex px-20 py-3 items-center justify-between'>
@@ -108,8 +164,8 @@ const MilkCheck = () => {
             <h1 className='text-6xl my-16 font-bold text-green-600 text-bold text-center'>Temperature : <CountUp end={temp} decimals={2} delay={15} duration={0.5}></CountUp> °C  </h1>
             <h1 className='text-6xl my-16  font-bold text-violet-600 text-bold text-center'>Presence of odour : <CountUp end={odor} delay={15} duration={0.5}></CountUp> </h1>
             <h1 className='text-6xl my-16  font-bold text-blue-500 text-bold text-center'>Price : ₹ <CountUp end={rate} delay={15} duration={0.5}></CountUp> /-</h1>
-            <div className='text-center'>
-            <button className='bg-black text-white text-3xl px-6 py-3 rounded-xl ' onClick={handleSubmit}>Save Rates</button>
+            <div className='text-center mb-12'>
+            <button className='bg-black text-white text-3xl  px-6 py-3 rounded-xl ' onClick={handleSubmit}>Save Rates</button>
             </div>
             </div>
             :
@@ -117,6 +173,8 @@ const MilkCheck = () => {
                 <h1 className='text-6xl text-bold text-center '>Dip the IoT Device in milk to see the results</h1>
             </div>
         }
+
+
     </div>
   )
 }

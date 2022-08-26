@@ -81,6 +81,9 @@ import {
   const DEFAULT_COLOR = '#C6C6C6';
   
   const AdminHome = () => {
+
+    let len = 0;
+    let sum = 0;
       
       const [number, setNumber] = useState(0)
       const [active, setActive] = useState(false)
@@ -111,12 +114,13 @@ import {
                     })
                     .then((response) => {
                       setUinstate(response.data)
-                      console.log(response.data)
+                      len = (response.data.length)
+                      console.log(len)    
+                      console.log(sum)
                     })
                     .catch((error) => {console.log(error)})
-      
     },[tooltipContent])
-    
+
   return (
     <div>
         <div className='flex px-20 py-3 items-center justify-between'>
